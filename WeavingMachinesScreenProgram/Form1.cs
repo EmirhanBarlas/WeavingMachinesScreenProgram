@@ -46,7 +46,9 @@ namespace WeavingMachinesScreenProgram
                 (string result, string result2) = await FetchDataFromUrl(url);
                 if (!string.IsNullOrEmpty(result) && !string.IsNullOrEmpty(result2))
                 {
-                    AddStatusPanel(machineName, result, result2, result2.Contains("Running forward") ? Color.Green : Color.Red);
+                    bool isRunning = result2.Contains("Running forward");
+                    string status = isRunning ? "Çalýþýyor" : result2;
+                    AddStatusPanel(machineName, result, status, isRunning ? Color.Green : Color.Red);
                 }
                 else
                 {
@@ -81,7 +83,7 @@ namespace WeavingMachinesScreenProgram
                 }
                 catch (HttpRequestException e)
                 {
-                    return ($"Ýstek Hatasý: {e.Message}", $"Ýstek Hatasý: {e.Message}");
+                    return ($"Veri Gelmiyor: {e.Message}", $"Veri Gelmiyor: {e.Message}");
                 }
                 catch (Exception error)
                 {
@@ -101,7 +103,7 @@ namespace WeavingMachinesScreenProgram
 
             Label nameLabel = new Label
             {
-                Text =  machineName,
+                Text = machineName,
                 Location = new Point(10, 10),
                 Font = new Font("Tahoma", 10, FontStyle.Bold)
             };
@@ -124,6 +126,11 @@ namespace WeavingMachinesScreenProgram
             panel.Controls.Add(patternLabel);
             panel.Controls.Add(statusLabel);
             flowLayoutPanel4.Controls.Add(panel);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://buferatextile.com.tr/");
         }
     }
 }
